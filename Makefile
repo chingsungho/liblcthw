@@ -1,6 +1,9 @@
-CFLAGS=-O2 -Isrc -rdynamic -DNDEBUG -Wno-implicit-function-declaration $(OPTFLAGS)
+CFLAGS=-O2 -Isrc -DNDEBUG -Wno-implicit-function-declaration $(OPTFLAGS)
 LDFLAGS=$(OPTLIBS)
 PREFIX?=/usr/local
+
+HEADERS:=$(wildcard src/**/*.h)
+HEADERS+=$(wildcard tests/minunit.h)
 
 SOURCES=$(wildcard src/**/*.c src/*.c)
 OBJECTS=$(patsubst %.c,%.o,$(SOURCES))
@@ -18,7 +21,7 @@ endif
 # The Target Build
 all: $(TARGET) tests
 
-dev: CFLAGS=-g -O2 -Isrc -Wno-implicit-function-declaration $(OPTFLAGS)
+dev: CFLAGS=-g -O2 -Isrc -rdynamic -Wno-implicit-function-declaration $(OPTFLAGS)
 dev: all
 
 $(TARGET): CFLAGS += -fPIC
@@ -48,8 +51,10 @@ clean:
 
 # The Install
 install: all
-	install -d $(DESTDIR)/$(PREFIX)/lib/
-	install $(TARGET) $(DESTDIR)/$(PREFIX)/lib/
+	sudo install -d $(DESTDIR)/$(PREFIX)/lib/
+	sudo install $(TARGET) $(DESTDIR)/$(PREFIX)/lib/
+	sudo install -d $(DESTDIR)/$(PREFIX)/include/lcthw/
+	sudo install -m 644 $(HEADERS) /$(PREFIX)/include/lcthw/
 
 # The Checker
 check:
