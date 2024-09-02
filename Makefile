@@ -1,4 +1,4 @@
-CFLAGS=-g -O2 -Wall -Wextra -Isrc -rdynamic -DNDEBUG $(OPTFLAGS)
+CFLAGS=-O2 -Isrc -rdynamic -DNDEBUG -Wno-implicit-function-declaration $(OPTFLAGS)
 LDFLAGS=$(OPTLIBS)
 PREFIX?=/usr/local
 
@@ -18,7 +18,7 @@ endif
 # The Target Build
 all: $(TARGET) tests
 
-dev: CFLAGS=-g -Wall -Isrc -Wall -Wextra $(OPTFLAGS)
+dev: CFLAGS=-g -O2 -Isrc -Wno-implicit-function-declaration $(OPTFLAGS)
 dev: all
 
 $(TARGET): CFLAGS += -fPIC
